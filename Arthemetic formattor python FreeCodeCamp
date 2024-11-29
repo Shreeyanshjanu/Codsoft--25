@@ -1,0 +1,67 @@
+def arithmetic_arranger(problems, display_answers=False):
+    if len(problems) > 5:
+        return "Error: Too many problems."
+
+    first_operands = []
+    second_operands = []
+    operators = []
+    results = []
+    
+    for problem in problems:
+        # Split each problem into its components
+        parts = problem.split()
+        if len(parts) != 3:
+            return "Error: Invalid problem format."
+        operand1, operator, operand2 = parts
+        
+        # Check for valid operator
+        if operator not in ['+', '-']:
+            return "Error: Operator must be '+' or '-'."
+        
+        # Check if operands contain only digits
+        if not operand1.isdigit() or not operand2.isdigit():
+            return "Error: Numbers must only contain digits."
+        
+        # Check if operands have more than four digits
+        if len(operand1) > 4 or len(operand2) > 4:
+            return "Error: Numbers cannot be more than four digits."
+        
+        # Calculate result if display_answers is True
+        if display_answers:
+            result = str(eval(problem))
+            results.append(result)
+        
+        # Store operands and operator
+        first_operands.append(operand1)
+        second_operands.append(operand2)
+        operators.append(operator)
+
+    # Format problems for output
+    line1 = []
+    line2 = []
+    line3 = []
+    line4 = [] if display_answers else None
+    
+    for i in range(len(problems)):
+        operand1 = first_operands[i]
+        operand2 = second_operands[i]
+        operator = operators[i]
+        width = max(len(operand1), len(operand2)) + 2  # Add 2 for operator and space
+        
+        # Format each line
+        line1.append(operand1.rjust(width))
+        line2.append(operator + " " + operand2.rjust(width - 2))
+        line3.append("-" * width)
+        if display_answers:
+            line4.append(results[i].rjust(width))
+    
+    # Join lines with four spaces
+    arranged_problems = (
+        "    ".join(line1) + "\n" +
+        "    ".join(line2) + "\n" +
+        "    ".join(line3)
+    )
+    if display_answers:
+        arranged_problems += "\n" + "    ".join(line4)
+    
+    return arranged_problems
